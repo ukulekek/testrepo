@@ -13,6 +13,9 @@ jobs:
     steps:
       - name: Delete the previous branch if exists
         uses: actions/github-script@v6
+        env:
+          BRANCH_NAME: '${{env.BRANCH_NAME}}'
+          COMMIT_MESSAGE: '${{env.COMMIT_MESSAGE}}'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -31,8 +34,12 @@ jobs:
                 });
               }
             }
+
       - name: Create new branch
         uses: actions/github-script@v6
+        env:
+          BRANCH_NAME: '${{env.BRANCH_NAME}}'
+          COMMIT_MESSAGE: '${{env.COMMIT_MESSAGE}}'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -43,10 +50,12 @@ jobs:
               ref: 'refs/head/${BRANCH_NAME}',
               sha: context.sha
             })
+
       - name: Checkout created branch
         uses: actions/checkout@v3
         with:
           ref: ${{ env.BRANCH_NAME }}
+
       - name: Create and push empty commit
         shell: bash
         run: |
@@ -55,8 +64,12 @@ jobs:
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit --allow-empty -m "$COMMIT_MESSAGE"
           git push
+
       - name: Create pull request
         uses: actions/github-script@v6
+        env:
+          BRANCH_NAME: '${{env.BRANCH_NAME}}'
+          COMMIT_MESSAGE: '${{env.COMMIT_MESSAGE}}'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
