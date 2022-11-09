@@ -35,24 +35,24 @@ jobs:
               }
             }
 
-      - name: Create new branch
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const { BRANCH_NAME, COMMIT_MESSAGE } = process.env
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'refs/head/${{ env.BRANCH_NAME }}',
-              sha: context.sha
-            })
+#     - name: Create new branch
+#       uses: actions/github-script@v6
+#       with:
+#         github-token: ${{ secrets.GITHUB_TOKEN }}
+#         script: |
+#           const { BRANCH_NAME, COMMIT_MESSAGE } = process.env
+#           github.rest.git.createRef({
+#             owner: context.repo.owner,
+#             repo: context.repo.repo,
+#             ref: 'refs/head/${{ env.BRANCH_NAME }}',
+#             sha: context.sha
+#           })
 
-      - name: Checkout created branch
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          ref: ${{ env.BRANCH_NAME }}
+#     - name: Checkout created branch
+#       uses: actions/checkout@v3
+#       with:
+#         fetch-depth: 0
+#         ref: ${{ env.BRANCH_NAME }}
 
       - name: Create and push empty commit
         shell: bash
@@ -60,6 +60,7 @@ jobs:
           set -euxo pipefail
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b weekly-ci
           git commit --allow-empty -m "${{ env.COMMIT_MESSAGE }}"
           git push
 
