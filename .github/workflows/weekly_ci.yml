@@ -22,6 +22,7 @@ jobs:
               repo: context.repo.repo,
               branch: '${{ env.BRANCH_NAME }}',
             });
+            console.log("here will be log");
             console.log(branches);
             for (branch in branches){
               console.log("deleting branch");
