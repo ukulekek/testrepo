@@ -17,7 +17,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { BRANCH_NAME, COMMIT_MESSAGE } = process.env
-            const branches = github.rest.repos.listBranches({
+            const branches = await github.rest.repos.listBranches({
               owner: context.repo.owner,
               repo: context.repo.repo,
               branch: '${{ env.BRANCH_NAME }}',
@@ -28,7 +28,7 @@ jobs:
               console.log("deleting branch");
               cobsole.log(branches[branch]);
               if (branches[branch].name == '${{ env.BRANCH_NAME }}'){
-                github.rest.git.deleteRef({
+                await github.rest.git.deleteRef({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   ref: 'refs/head/${{ env.BRANCH_NAME }}',
