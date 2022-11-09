@@ -22,12 +22,15 @@ jobs:
               repo: context.repo.repo,
               branch: '${{ env.BRANCH_NAME }}',
             });
+            console.log(branches);
             for (branch in branches){
-              if (branches[branch].name == 'head/${{ env.BRANCH_NAME }}'){
+              console.log("deleting branch");
+              cobsole.log(branches[branch]);
+              if (branches[branch].name == '${{ env.BRANCH_NAME }}'){
                 github.rest.git.deleteRef({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
-                  ref: 'head/${{ env.BRANCH_NAME }}',
+                  ref: 'refs/head/${{ env.BRANCH_NAME }}',
                 });
               }
             }
