@@ -24,29 +24,16 @@ jobs:
             console.log("here will be log");
             console.log(response);
             for (ref in response.data){
-              if (response.data[ref].ref == "refs/head/${{ env.BRANCH_NAME }}"){
+              if (response.data[ref].ref == "refs/heads/${{ env.BRANCH_NAME }}"){
                 console.log("deleting branch");
                 console.log(response.data[ref]);
                 await github.rest.git.deleteRef({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
-                  ref: "head/${{ env.BRANCH_NAME }}",
+                  ref: "heads/${{ env.BRANCH_NAME }}",
                 });
               }
             }
-
-#     - name: Create new branch
-#       uses: actions/github-script@v6
-#       with:
-#         github-token: ${{ secrets.GITHUB_TOKEN }}
-#         script: |
-#           const { BRANCH_NAME, COMMIT_MESSAGE } = process.env
-#           github.rest.git.createRef({
-#             owner: context.repo.owner,
-#             repo: context.repo.repo,
-#             ref: 'refs/head/${{ env.BRANCH_NAME }}',
-#             sha: context.sha
-#           })
 
       - uses: actions/checkout@v3
         with:
