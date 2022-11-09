@@ -7,6 +7,7 @@ on:  # yamllint disable-line rule:truthy
 env:
   BRANCH_NAME: "weekly-ci"
   COMMIT_MESSAGE: "Weekly CI check"
+  COMMENT: "[citest]"
 jobs:
   weekly_ci:
     runs-on: ubuntu-latest
@@ -46,7 +47,7 @@ jobs:
           git commit --allow-empty -m "${{ env.COMMIT_MESSAGE }}"
           git push --set-upstream origin ${{ env.BRANCH_NAME }}
 
-      - name: Create pull request
+      - name: Create and comment pull request
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -54,9 +55,15 @@ jobs:
             const response = await github.rest.pulls.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: '${{ env.COMMIT_MESSAGE }}',
-              head: '${{ env.BRANCH_NAME }}',
+              title: "${{ env.COMMIT_MESSAGE }}",
+              head: "${{ env.BRANCH_NAME }}",
               base: context.ref
             });
             console.log(response);
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: response.data.number,
+              body: "${{ env.COMMENT }}",
+            });
 
