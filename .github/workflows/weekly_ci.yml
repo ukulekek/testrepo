@@ -51,6 +51,7 @@ jobs:
       - name: Checkout created branch
         uses: actions/checkout@v3
         with:
+          fetch-depth: 0
           ref: ${{ env.BRANCH_NAME }}
 
       - name: Create and push empty commit
