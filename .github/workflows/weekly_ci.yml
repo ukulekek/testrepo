@@ -23,11 +23,11 @@ jobs:
               branch: '${{ env.BRANCH_NAME }}',
             });
             for (branch in branches){
-              if (branches[branch].name == '${{ env.BRANCH_NAME }}'){
+              if (branches[branch].name == 'head/${{ env.BRANCH_NAME }}'){
                 github.rest.git.deleteRef({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
-                  ref: 'heads/${{ env.BRANCH_NAME }}',
+                  ref: 'head/${{ env.BRANCH_NAME }}',
                 });
               }
             }
