@@ -13,9 +13,6 @@ jobs:
     steps:
       - name: Delete the previous branch if exists
         uses: actions/github-script@v6
-        env:
-          BRANCH_NAME: '${{env.BRANCH_NAME}}'
-          COMMIT_MESSAGE: '${{env.COMMIT_MESSAGE}}'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -23,23 +20,20 @@ jobs:
             const branches = github.rest.repos.listBranches({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              branch: '${BRANCH_NAME}',
+              branch: '${{ env.BRANCH_NAME }}',
             });
             for (branch in branches){
-              if (branches[branch].name == '${BRANCH_NAME}'){
+              if (branches[branch].name == '${{ env.BRANCH_NAME }}'){
                 github.rest.git.deleteRef({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
-                  ref: 'heads/${BRANCH_NAME}',
+                  ref: 'heads/${{ env.BRANCH_NAME }}',
                 });
               }
             }
 
       - name: Create new branch
         uses: actions/github-script@v6
-        env:
-          BRANCH_NAME: '${{env.BRANCH_NAME}}'
-          COMMIT_MESSAGE: '${{env.COMMIT_MESSAGE}}'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -47,7 +41,7 @@ jobs:
             github.rest.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: 'refs/head/${BRANCH_NAME}',
+              ref: 'refs/head/${{ env.BRANCH_NAME }}',
               sha: context.sha
             })
 
@@ -62,14 +56,11 @@ jobs:
           set -euxo pipefail
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit --allow-empty -m "$COMMIT_MESSAGE"
+          git commit --allow-empty -m "${{ env.COMMIT_MESSAGE }}"
           git push
 
       - name: Create pull request
         uses: actions/github-script@v6
-        env:
-          BRANCH_NAME: '${{env.BRANCH_NAME}}'
-          COMMIT_MESSAGE: '${{env.COMMIT_MESSAGE}}'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -77,7 +68,7 @@ jobs:
             github.rest.pulls.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: '${COMMIT_MESSAGE}',
-              head: '${BRANCH_NAME}',
+              title: '${{ env.COMMIT_MESSAGE }}',
+              head: '${{ env.BRANCH_NAME }}',
               base: context.ref
             })
