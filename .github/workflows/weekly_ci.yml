@@ -16,8 +16,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const { BRANCH_NAME, COMMIT_MESSAGE } = process.env
-            const branches = await github.rest.repos.listMatchingRefs({
+            const branches = await github.rest.git.listMatchingRefs({
               owner: context.repo.owner,
               repo: context.repo.repo,
               branch: 'heads/${{ env.BRANCH_NAME }}',
