@@ -51,7 +51,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const respone = await github.rest.pulls.create({
+            const response = await github.rest.pulls.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: '${{ env.COMMIT_MESSAGE }}',
