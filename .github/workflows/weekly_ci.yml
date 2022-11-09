@@ -40,7 +40,7 @@ jobs:
             github.rest.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: 'ref/head/${BRANCH_NAME}',
+              ref: 'refs/head/${BRANCH_NAME}',
               sha: context.sha
             })
       - name: Checkout created branch
