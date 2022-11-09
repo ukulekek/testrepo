@@ -19,18 +19,18 @@ jobs:
             const response = await github.rest.git.listMatchingRefs({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              branch: 'heads/${{ env.BRANCH_NAME }}',
+              branch: "heads/${{ env.BRANCH_NAME }}",
             });
             console.log("here will be log");
             console.log(response);
             for (ref in response.data){
-              if (response.data[ref].ref == 'refs/head/${{ env.BRANCH_NAME }}'){
+              if (response.data[ref].ref == "refs/head/${{ env.BRANCH_NAME }}"){
                 console.log("deleting branch");
                 console.log(response.data[ref]);
                 await github.rest.git.deleteRef({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
-                  ref: 'refs/head/${{ env.BRANCH_NAME }}',
+                  ref: "head/${{ env.BRANCH_NAME }}",
                 });
               }
             }
