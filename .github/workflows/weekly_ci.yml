@@ -21,8 +21,6 @@ jobs:
               repo: context.repo.repo,
               branch: "heads/${{ env.BRANCH_NAME }}",
             });
-            console.log("here will be log");
-            console.log(response);
             for (ref in response.data){
               if (response.data[ref].ref == "refs/heads/${{ env.BRANCH_NAME }}"){
                 console.log("deleting branch");
@@ -53,11 +51,12 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const { BRANCH_NAME, COMMIT_MESSAGE } = process.env
-            github.rest.pulls.create({
+            const respone = await github.rest.pulls.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: '${{ env.COMMIT_MESSAGE }}',
               head: '${{ env.BRANCH_NAME }}',
               base: context.ref
-            })
+            });
+            console.log(response);
+
