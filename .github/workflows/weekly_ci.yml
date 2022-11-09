@@ -59,7 +59,7 @@ jobs:
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -b weekly-ci
           git commit --allow-empty -m "${{ env.COMMIT_MESSAGE }}"
-          git push
+          git push --set-upstream origin ${{ env.BRANCH_NAME }}
 
       - name: Create pull request
         uses: actions/github-script@v6
