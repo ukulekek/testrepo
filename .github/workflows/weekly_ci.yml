@@ -17,17 +17,17 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { BRANCH_NAME, COMMIT_MESSAGE } = process.env
-            const branches = await github.rest.repos.listBranches({
+            const branches = await github.rest.repos.listMatchingRefs({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              branch: '${{ env.BRANCH_NAME }}',
+              branch: 'heads/${{ env.BRANCH_NAME }}',
             });
             console.log("here will be log");
             console.log(branches);
             for (branch in branches){
               console.log("deleting branch");
               cobsole.log(branches[branch]);
-              if (branches[branch].name == '${{ env.BRANCH_NAME }}'){
+              if (branches[branch].name == 'refs/head/${{ env.BRANCH_NAME }}'){
                 await github.rest.git.deleteRef({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
