@@ -16,15 +16,15 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const refs = await github.rest.git.listMatchingRefs({
+            const response = await github.rest.git.listMatchingRefs({
               owner: context.repo.owner,
               repo: context.repo.repo,
               branch: 'heads/${{ env.BRANCH_NAME }}',
             });
             console.log("here will be log");
-            console.log(refs);
-            for (ref in refs){
-              if (refs[ref].ref == 'refs/head/${{ env.BRANCH_NAME }}'){
+            console.log(response);
+            for (ref in response.data){
+              if (response.data[ref].ref == 'refs/head/${{ env.BRANCH_NAME }}'){
                 console.log("deleting branch");
                 console.log(refs[branch]);
                 await github.rest.git.deleteRef({
