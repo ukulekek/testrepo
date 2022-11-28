@@ -32,9 +32,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            console.log('making head');
             const head = [context.repo.owner, ":", "${{ env.BRANCH_NAME }}"].join("");
-            console.log(head);
             var response = await github.rest.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -42,7 +40,6 @@ jobs:
               base: context.ref,
               state: "open"
             });
-            console.log(response);
             if (response.data.length === 0) {
               response = await github.rest.pulls.create({
                 owner: context.repo.owner,
@@ -51,8 +48,10 @@ jobs:
                 head: "${{ env.BRANCH_NAME }}",
                 base: context.ref
               });
+              var pr_number = response.data.number;
+            } else {
+              var pr_number = response.data[0].number;
             }
-            console.log(response);
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
