@@ -8,7 +8,7 @@ env:
   BRANCH_NAME: "weekly-ci"
   COMMIT_MESSAGE: "Weekly CI check"
   COMMENT: "[citest]"
-  MAIN_BRANCH: "master"
+  MAIN_BRANCH: "main"
 jobs:
   weekly_ci:
     runs-on: ubuntu-latest
