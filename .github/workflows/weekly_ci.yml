@@ -32,13 +32,24 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const response = await github.rest.pulls.create({
+            head = context.repo.owner + ":" + "${{ env.BRANCH_NAME }}";
+            const response = await github.rest.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: "${{ env.COMMIT_MESSAGE }}",
-              head: "${{ env.BRANCH_NAME }}",
+              head: head,
               base: context.ref
+              state: open
             });
+            if (response.data.length === 0) {
+              const response = await github.rest.pulls.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: "${{ env.COMMIT_MESSAGE }}",
+                head: "${{ env.BRANCH_NAME }}",
+                base: context.ref
+              });
+            }
             console.log(response);
             github.rest.issues.createComment({
               owner: context.repo.owner,
