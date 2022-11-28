@@ -39,8 +39,8 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               head: head,
-              base: context.ref
-              state: open
+              base: context.ref,
+              state: "open"
             });
             console.log(response);
             if (response.data.length === 0) {
