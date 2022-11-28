@@ -32,7 +32,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            head = [context.repo.owner, ":", "${{ env.BRANCH_NAME }}"].join("");
+            const head = [context.repo.owner, ":", "${{ env.BRANCH_NAME }}"].join("");
             const response = await github.rest.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
