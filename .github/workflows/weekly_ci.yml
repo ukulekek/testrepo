@@ -36,7 +36,6 @@ jobs:
             const response = await github.rest.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: "${{ env.COMMIT_MESSAGE }}",
               head: head,
               base: context.ref
               state: open
