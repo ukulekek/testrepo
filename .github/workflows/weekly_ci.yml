@@ -35,7 +35,7 @@ jobs:
             console.log('making head');
             const head = [context.repo.owner, ":", "${{ env.BRANCH_NAME }}"].join("");
             console.log(head);
-            const response = await github.rest.pulls.list({
+            var response = await github.rest.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
               head: head,
@@ -44,22 +44,19 @@ jobs:
             });
             console.log(response);
             if (response.data.length === 0) {
-              const response = await github.rest.pulls.create({
+              response = await github.rest.pulls.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 title: "${{ env.COMMIT_MESSAGE }}",
                 head: "${{ env.BRANCH_NAME }}",
                 base: context.ref
               });
-              const pr_number = response.data.number;
-            } else {
-              const pr_number = response.data.number;
             }
             console.log(response);
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: pr_number,
+              issue_number: response.data[0].number,
               body: "${{ env.COMMENT }}",
             });
 
